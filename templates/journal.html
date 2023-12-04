@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Журнал</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        select {
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        select::-ms-expand {
+          display: none;
+        }
+    </style>
+</head>
+
+<body style="height: 100dvh;" class="flex flex-col gap-4 justify-center items-center bg-zinc-900 text-white">
+    <form class="w-full flex h-full flex-col justify-between" action="" method="post">
+        <div class="flex overflow-y-scroll text-sm">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="p-1 border border-zinc-700"><br><br></td>
+                    </tr>
+                    {% for student in students %}
+                        <tr>
+                            <td class="p-1 border border-zinc-700 font-bold whitespace-nowrap" style="height: 29px;">{{ student[0] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <table>
+                <thead>
+                <tr>
+                    {% for date in dates %}
+                    <td class="p-1 border border-zinc-700 font-bold text-center" style="width: 29px;">{{ date[0] }}<br>{{ date[1] }}</td>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in marks %}
+                {% set outer_loop = loop %}
+                <tr>
+                    {% for mark in row %}
+                        {% if mark is none %}
+                            {% if scanned_marks[outer_loop.index0][loop.index0] is not none %}
+                                <td class="p-1 border text-slate-600 border-zinc-700 text-center" style="width: 29px; height:29px;">
+                                    <select class="text-slate-600 bg-zinc-900 text-center" name="{{ dates[loop.index0][2] }}_{{ dates[loop.index0][3] }}_{{ students[outer_loop.index0][1] }}">
+                                        <option hidden selected value="{{ scanned_marks[outer_loop.index0][loop.index0] if scanned_marks[outer_loop.index0][loop.index0] else 'н' }}">{{ scanned_marks[outer_loop.index0][loop.index0] if scanned_marks[outer_loop.index0][loop.index0] else "н" }}</option>
+                                        <option value="н">н</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </td>
+                            {% else %}
+                                <td class="p-1 border border-zinc-700 text-center" style="width: 29px; height:29px;">{{ " " }}</td>
+                            {% endif %}
+                        {% else %}
+                            <td class="p-1 border border-zinc-700 text-center" style="width: 29px; height:29px;">{{ mark if mark else " " }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <input class="hidden" type="text" name="journal" value="{{ journal }}">
+        <input class="px-5 py-3 bg-zinc-700" type="submit" value="Отправить">
+    </form>
+</body>
+
+</html>

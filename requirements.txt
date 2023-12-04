@@ -1,0 +1,11 @@
+flask
+flask-login
+
+requests
+beautifulsoup4
+
+opencv-contrib-python-headless
+pillow
+
+keras
+tensorflow
